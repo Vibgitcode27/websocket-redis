@@ -1,10 +1,14 @@
-import WebSocket, { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
+import { IncomingMessage, ServerResponse } from "http";
 import http from "http";
 
-const server = http.createServer((request: any, response: any) => {
-  console.log(new Date() + "received request for " + request.url);
-  response.add("hi there");
-});
+const server = http.createServer(
+  (request: IncomingMessage, response: ServerResponse) => {
+    console.log(new Date() + "received request for " + request.url);
+    response.write("hi there");
+    response.end();
+  }
+);
 
 const wss = new WebSocketServer({ server });
 
@@ -23,5 +27,5 @@ wss.on("connection", function connection(ws) {
 });
 
 server.listen(8080, () => {
-  console.log(new Date() + " Server is listeningg to post 8080");
+  console.log(new Date() + " Server is listening to post 8080");
 });
